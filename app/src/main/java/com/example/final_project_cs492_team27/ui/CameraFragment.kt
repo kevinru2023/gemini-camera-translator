@@ -4,11 +4,16 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.final_project_cs492_team27.R
@@ -18,6 +23,7 @@ import java.util.concurrent.Executors
 
 class CameraFragment : Fragment(R.layout.main_frag) {
     private var imageCapture: ImageCapture? = null
+    private var cameraPV: PreviewView? = null
     private lateinit var cameraExecutor: ExecutorService
 
     private val activityResultLauncher =
@@ -41,6 +47,7 @@ class CameraFragment : Fragment(R.layout.main_frag) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        cameraPV = view.findViewById<PreviewView>(R.id.viewFinder)
         val imageCaptureButton = view.findViewById<Button>(R.id.image_capture_button)
         if (allPermissionsGranted()) {
             startCamera()
@@ -57,13 +64,45 @@ class CameraFragment : Fragment(R.layout.main_frag) {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView(){
+        super.onDestroyView()
+        cameraPV = null
         cameraExecutor.shutdown()
     }
 
     private fun takePhoto() {}
-    private fun startCamera() {}
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
+        cameraProviderFuture.addListener({
+            // Used to bind the lifecycle of cameras to the lifecycle owner
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            // Preview
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(cameraPV?.surfaceProvider)
+                }
+
+            // Select back camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                // Unbind use cases before rebinding
+                cameraProvider.unbindAll()
+
+                // Bind use cases to camera
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview)
+
+            } catch(exc: Exception) {
+                Log.e(TAG, "Use case binding failed", exc)
+            }
+
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
     private fun requestPermissions() {
         activityResultLauncher.launch(REQUIRED_PERMISSIONS)
     }
@@ -76,7 +115,6 @@ class CameraFragment : Fragment(R.layout.main_frag) {
 
     companion object {
         private const val TAG = "Camera App" // const val doesn't take in R.string val
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }
