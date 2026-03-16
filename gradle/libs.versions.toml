@@ -12,9 +12,9 @@ constraintlayout = "2.2.1"
 fragment = "1.8.9"
 camerax= "1.5.3"
 navigation = "2.9.7"
-room = "2.6.1"
+room = "2.8.4"
 ksp = "2.0.21-1.0.27"
-coroutines = "1.7.3"
+coroutines = "1.10.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
