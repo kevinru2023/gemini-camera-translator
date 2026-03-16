@@ -1,7 +1,6 @@
 package com.example.final_project_cs492_team27.ui
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -21,7 +20,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 
-class CameraFragment : Fragment(R.layout.main_frag) {
+class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
     private var imageCapture: ImageCapture? = null
     private var cameraPV: PreviewView? = null
     private lateinit var cameraExecutor: ExecutorService
@@ -94,7 +93,7 @@ class CameraFragment : Fragment(R.layout.main_frag) {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview)
+                    viewLifecycleOwner, cameraSelector, preview)
 
             } catch(exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
