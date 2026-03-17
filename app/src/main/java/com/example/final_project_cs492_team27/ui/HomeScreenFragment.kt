@@ -2,6 +2,7 @@ package com.example.final_project_cs492_team27.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,12 +16,20 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.final_project_cs492_team27.R
+import com.example.final_project_cs492_team27.data.db.AppDatabase
+import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
+import androidx.core.graphics.createBitmap
 
 class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
+
+    private val homeViewModel: HomeViewModel by viewModels()
+    private val translationHistoryViewModel: TranslationHistoryViewModel by viewModels()
+
     private var imageCapture: ImageCapture? = null
     private var cameraPV: PreviewView? = null
     private lateinit var cameraExecutor: ExecutorService
@@ -61,6 +70,29 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        homeViewModel.translationState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is TranslationState.Loading -> {
+                    Toast.makeText(requireContext(), getString(R.string.translating), Toast.LENGTH_SHORT).show()
+                }
+                is TranslationState.Success -> {
+                    Toast.makeText(requireContext(), getString(R.string.translation_success), Toast.LENGTH_SHORT).show()
+                    val history = state.translation
+                    
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        AppDatabase.getDatabase(requireContext()).translationHistoryDao().insert(history)
+                    }
+                    
+                    homeViewModel.resetState()
+                }
+                is TranslationState.Error -> {
+                    Toast.makeText(requireContext(), getString(R.string.error_translation, state.message), Toast.LENGTH_LONG).show()
+                    Log.e(TAG, "Gemini Error: ${state.message}")
+                    homeViewModel.resetState()
+                }
+                TranslationState.Idle -> { }
+            }
+        }
     }
 
     override fun onDestroyView(){
@@ -69,7 +101,13 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
         cameraExecutor.shutdown()
     }
 
-    private fun takePhoto() {}
+    private fun takePhoto() {
+        val dummyBitmap = createBitmap(100, 100)
+        dummyBitmap.eraseColor(Color.WHITE)
+        
+        homeViewModel.translateImage(dummyBitmap, "Spanish")
+    }
+
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
