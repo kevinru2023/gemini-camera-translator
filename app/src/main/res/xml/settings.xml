@@ -4,9 +4,16 @@
         <ListPreference
             app:key="target_language"
             app:title="Translate to"
-            app:defaultValue="Spanish"
+            app:defaultValue="English"
             app:entries="@array/language_names"
             app:entryValues="@array/language_values"
+            app:useSimpleSummaryProvider="true"
+            />
+
+        <EditTextPreference
+            app:key="font_size"
+            app:title="Font Size"
+            app:defaultValue="18"
             app:useSimpleSummaryProvider="true"
             />
     </PreferenceCategory>
