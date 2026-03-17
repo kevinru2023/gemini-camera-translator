@@ -60,5 +60,7 @@ dependencies {
     implementation(libs.camera.extensions)
     implementation(libs.camera.lifecycle)
 
+    implementation(libs.androidx.preference.ktx)
+
 
 }
