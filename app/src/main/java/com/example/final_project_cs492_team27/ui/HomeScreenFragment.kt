@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
@@ -33,6 +34,20 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
     private var imageCapture: ImageCapture? = null
     private var cameraPV: PreviewView? = null
     private lateinit var cameraExecutor: ExecutorService
+
+//    //following two functions make it so that the drawer is hidden in the home screen but appears in other fragments
+//    override fun onResume() {
+//        super.onResume()
+//        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+//        (activity as? MainActivity)?.supportActionBar?.hide()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        (activity as? MainActivity)?.supportActionBar?.show()
+//    }
+
+
 
     private val activityResultLauncher =
         registerForActivityResult(

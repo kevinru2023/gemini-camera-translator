@@ -21,6 +21,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 class   MainActivity : AppCompatActivity() {
 
     lateinit var appBarConfig: AppBarConfiguration
+    //lateinit var toggle: ActionBarDrawerToggle //declaration of toggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +39,11 @@ class   MainActivity : AppCompatActivity() {
             R.id.nav_host_fragment
         ) as NavHostFragment
         val navController = navHostFragment.navController
-        appBarConfig = AppBarConfiguration(navController.graph, drawerLayout)
+        //makes it so the hamburger only appears in settings and history frags
+        appBarConfig = AppBarConfiguration(
+            setOf(R.id.translation_history, R.id.settings),
+            drawerLayout
+        )
 
         val topAppBar: MaterialToolbar = findViewById(R.id.top_app_bar)
         setSupportActionBar(topAppBar)
@@ -46,15 +51,30 @@ class   MainActivity : AppCompatActivity() {
 
         findViewById<NavigationView>(R.id.nav_view)?.setupWithNavController(navController)
 
-        val toggle = ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            topAppBar,
-            R.string.nav_open,
-            R.string.nav_close
-        )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        //connects hamburger icon with the drawer, also turns into a back arrow after navigation
+//        toggle = ActionBarDrawerToggle(
+//            this,
+//            drawerLayout,
+//            R.string.nav_open,
+//            R.string.nav_close
+//        )
+//        drawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
+
+//        navController.addOnDestinationChangedListener { _, destination,_ ->
+//            when (destination.id){
+//                R.id.home_screen -> {
+//                    supportActionBar?.hide()
+//                }
+//                R.id.translation_history, R.id.settings -> {
+//                   supportActionBar?.show()
+//                    topAppBar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+//                    topAppBar.setNavigationOnClickListener {
+//                        drawerLayout.open()
+//                    }
+//                }
+//            }
+//        }
     }
     override fun onSupportNavigateUp(): Boolean {
         val navController = (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController

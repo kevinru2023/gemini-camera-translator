@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_screen"
+        android:title="@string/label_home_screen"/>
+    <item
+        android:id="@+id/translation_history"
+        android:title="@string/label_history"/>
+    <item
+        android:id="@+id/settings"
+        android:title="@string/label_settings"/>
+
+</menu>
