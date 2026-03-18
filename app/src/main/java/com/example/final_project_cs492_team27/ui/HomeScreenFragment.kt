@@ -29,6 +29,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import androidx.core.graphics.createBitmap
 import java.nio.ByteBuffer
+import androidx.preference.PreferenceManager
 
 class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
 
@@ -115,7 +116,11 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
                 //get bitmap from image
                 val bitmap = imageProxyToBitmap(image)
                 image.close()
-                homeViewModel.translateImage(bitmap, "Spanish")
+
+                val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+                val targetLanguage = prefs.getString("target_language", "English") ?: "English"
+                homeViewModel.translateImage(bitmap, targetLanguage)
+
                 Log.d(TAG, "Bitmap: ${bitmap.width}x${bitmap.height}, config=${bitmap.config}")
                 super.onCaptureSuccess(image)
             }
