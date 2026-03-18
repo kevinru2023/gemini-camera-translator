@@ -23,4 +23,9 @@
         android:label="@string/label_settings"
         android:name="com.example.final_project_cs492_team27.ui.SettingsFragment"/>
 
+    <fragment
+        android:id="@+id/translation_history"
+        android:label="@string/label_history"
+        android:name="com.example.final_project_cs492_team27.ui.TranslationHistoryFragment"/>
+
 </navigation>

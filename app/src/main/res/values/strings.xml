@@ -6,8 +6,15 @@
 
     <string name="label_home_screen">Home</string>
     <string name="label_settings">Settings</string>
+    <string name="label_history">History</string>
+    <string name="translation_language_format">%1$s - %2$s</string>
 
     <string name="nav_open">Open navigation drawer</string>
     <string name="nav_close">Close navigation drawer</string>
 
+    <string name="translating">Translating…</string>
+    <string name="translation_success">Translation Success!</string>
+    <string name="error_translation">Error: %1$s</string>
+    <string name="error_empty_response">Received empty response from Gemini.</string>
+    <string name="error_translation_failed">Translation failed</string>
 </resources>

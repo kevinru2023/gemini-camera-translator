@@ -62,5 +62,10 @@ dependencies {
 
     implementation(libs.androidx.preference.ktx)
 
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.google.generativeai)
 
 }
