@@ -4,12 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.Size
 import androidx.recyclerview.widget.RecyclerView
 import com.example.final_project_cs492_team27.R
 import com.example.final_project_cs492_team27.data.model.TranslationHistory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import androidx.preference.PreferenceManager
 
 class TranslationHistoryAdapter : RecyclerView.Adapter<TranslationHistoryAdapter.ViewHolder>() {
 
@@ -28,7 +30,11 @@ class TranslationHistoryAdapter : RecyclerView.Adapter<TranslationHistoryAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val current = historyList[position]
-        holder.bind(current)
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(holder.itemView.context)
+        val fontSize = prefs.getString("font_size", "18")?.toFloatOrNull() ?: 18f
+
+        holder.bind(current, fontSize)
     }
 
     override fun getItemCount(): Int = historyList.size
@@ -39,7 +45,7 @@ class TranslationHistoryAdapter : RecyclerView.Adapter<TranslationHistoryAdapter
         private val textTranslated: TextView = itemView.findViewById(R.id.text_translated)
         private val textTimestamp: TextView = itemView.findViewById(R.id.text_timestamp)
 
-        fun bind(history: TranslationHistory) {
+        fun bind(history: TranslationHistory, fontSize: Float) {
             textLanguages.text = itemView.context.getString(
                 R.string.translation_language_format, 
                 history.originalLanguage, 
@@ -47,6 +53,9 @@ class TranslationHistoryAdapter : RecyclerView.Adapter<TranslationHistoryAdapter
             )
             textOriginal.text = history.originalText
             textTranslated.text = history.translatedText
+
+            textOriginal.textSize = fontSize
+            textTranslated.textSize = fontSize
 
             val formatter = SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.getDefault())
             textTimestamp.text = formatter.format(Date(history.timestamp))
