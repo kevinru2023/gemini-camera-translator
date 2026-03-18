@@ -1,8 +1,10 @@
 package com.example.final_project_cs492_team27.ui
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.final_project_cs492_team27.R
@@ -31,6 +33,7 @@ class TranslationHistoryAdapter : RecyclerView.Adapter<TranslationHistoryAdapter
         holder.bind(current)
     }
 
+
     override fun getItemCount(): Int = historyList.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,6 +41,7 @@ class TranslationHistoryAdapter : RecyclerView.Adapter<TranslationHistoryAdapter
         private val textOriginal: TextView = itemView.findViewById(R.id.text_original)
         private val textTranslated: TextView = itemView.findViewById(R.id.text_translated)
         private val textTimestamp: TextView = itemView.findViewById(R.id.text_timestamp)
+        private val buttonShare: ImageButton = itemView.findViewById(R.id.button_share)
 
         fun bind(history: TranslationHistory) {
             textLanguages.text = itemView.context.getString(
@@ -50,6 +54,15 @@ class TranslationHistoryAdapter : RecyclerView.Adapter<TranslationHistoryAdapter
 
             val formatter = SimpleDateFormat("MM/dd/yyyy h:mm a", Locale.getDefault())
             textTimestamp.text = formatter.format(Date(history.timestamp))
+
+            //button listener for the share feature
+            buttonShare.setOnClickListener{
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, "Original: ${history.originalText}\nTranslation: ${history.translatedText}")
+                }
+                itemView.context.startActivity(Intent.createChooser(shareIntent, "share translation"))
+            }
         }
     }
 }
