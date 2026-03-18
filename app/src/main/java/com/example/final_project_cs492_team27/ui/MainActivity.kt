@@ -38,14 +38,17 @@ class   MainActivity : AppCompatActivity() {
             R.id.nav_host_fragment
         ) as NavHostFragment
         val navController = navHostFragment.navController
+        //shows hamburger instead of arrow by saying this has a sliding component
         appBarConfig = AppBarConfiguration(navController.graph, drawerLayout)
 
         val topAppBar: MaterialToolbar = findViewById(R.id.top_app_bar)
         setSupportActionBar(topAppBar)
         setupActionBarWithNavController(navController, appBarConfig)
 
+        //allows navigation to happen when pressing on fragment
         findViewById<NavigationView>(R.id.nav_view)?.setupWithNavController(navController)
 
+        //connects hamburger to the drawer, turns hamburger into back arrow
         val toggle = ActionBarDrawerToggle(
             this,
             drawerLayout,
