@@ -8,7 +8,7 @@ Built as a team final project for **CS 492 (Mobile Development) at Oregon State 
 - Live camera preview and photo capture (CameraX)
 - Image → Gemini multimodal prompt with a strict **JSON response schema** (`originalLanguage`, `translatedLanguage`, `originalText`, `translatedText`) so the reply parses reliably
 - Translation history stored with **Room** (SQLite) and shown in a RecyclerView
-- Settings screen with user preferences (e.g. font size), plus a navigation drawer
+- Settings screen with user preferences (e.g. font size)
 
 ## Tech
 Kotlin · Android Fragments + ViewModel/LiveData · Coroutines · CameraX · Google Generative AI SDK (Gemini 2.5 Flash) · Room
